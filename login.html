@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Papoclub - Bienvenido</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- PWA / Web App -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00e5ff" />
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: url('https://img1.wsimg.com/isteam/ip/c5024baa-7b54-4ada-87b9-e4681a6d9370/1000011363.png/:/rs=w:1440,h:1440') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #0ff;
+      text-shadow: 1px 1px 2px #000;
+    }
+    .card, .modal {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #0ff5;
+      text-align: center;
+      max-width: 90%;
+      width: 360px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      font-size: 1em;
+      width: 100%;
+    }
+    input {
+      border: 1px solid #0ff;
+      background: #011;
+      color: #0ff;
+    }
+    button {
+      background: #0ff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      filter: brightness(0.9);
+    }
+    button:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+    .wallet-btn {
+      background: #444;
+      color: #888;
+      font-size: 0.85em;
+      padding: 8px;
+      margin-top: 5px;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    a {
+      color: #8ff;
+      display: block;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: none;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9;
+      display: none;
+    }
+    .loading {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Bienvenido a Papoclub</h1>
+    <input type="email" id="email" placeholder="Correo electrónico" />
+    <input type="password" id="password" placeholder="Contraseña" />
+    <button id="btnLogin" onclick="login()">Entrar</button>
+    <button class="wallet-btn" disabled title="Próximamente disponible">🔗 Connect Wallet</button>
+    <a onclick="mostrarRegistro()">Crear cuenta nueva</a>
+    <a onclick="mostrarRecuperacion()">¿Olvidaste tu contraseña?</a>
+  </div>
+
+  <!-- Modal Registro -->
+  <div class="overlay" id="overlay"></div>
+  <div class="modal" id="modalRegistro">
+    <h2>Crear nueva cuenta</h2>
+    <input type="email" id="nuevoEmail" placeholder="Correo electrónico" />
+    <input type="text" id="nuevoUsername" placeholder="Nombre de usuario" />
+    <input type="password" id="nuevoPassword" placeholder="Contraseña" />
+    <button id="btnCrear" onclick="crearCuenta()">Crear</button>
+    <a onclick="cerrarRegistro()">Cancelar</a>
+  </div>
+
+  <!-- Modal Recuperar -->
+  <div class="modal" id="modalRecuperar">
+    <h2>Recuperar contraseña</h2>
+    <input type="email" id="recuperarEmail" placeholder="Tu correo registrado" />
+    <button id="btnRecuperar" onclick="recuperarPassword()">Enviar enlace</button>
+    <a onclick="cerrarRecuperacion()">Cancelar</a>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJmOS9MjDhjJrKCMIUVbgmRiEi2xLIkrQ",
+      authDomain: "papoclub-737ac.firebaseapp.com",
+      projectId: "papoclub-737ac",
+      storageBucket: "papoclub-737ac.appspot.com",
+      messagingSenderId: "76712370993",
+      appId: "1:76712370993:web:2d2646b258efbccf68c73e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Función para deshabilitar botones durante operaciones
+    function setButtonsLoading(loading) {
+      const buttons = ['btnLogin', 'btnCrear', 'btnRecuperar'];
+      buttons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.disabled = loading;
+          if (loading) btn.classList.add('loading');
+          else btn.classList.remove('loading');
+        }
+      });
+    }
+
+    window.login = async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      
+      if (!email || !password) {
+        alert("Por favor ingresa correo y contraseña");
+        return;
+      }
+
+      setButtonsLoading(true);
+      
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        // Opcional: modo fullscreen para PWA
+        if (document.documentElement.requestFullscreen) {
+          try {
+            await document.documentElement.requestFullscreen();
+          } catch (e) {
+            // Si falla fullscreen, no importa, continuamos
+            console.log("Fullscreen no disponible");
+          }
+        }
+        
+        // Redirigir al chat en lugar de home.html
+        location.href = "chatweb.html";
+        
+      } catch (error) {
+        setButtonsLoading(false);
+        let errorMessage = "Error al iniciar sesión";
+        
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = "Usuario no encontrado";
+            break;
+          case 'auth/wrong-password':
+            errorMessage = "Contraseña incorrecta";
+            break;
+          case 'auth/invalid-email':
+            errorMessage = "Correo electrónico inválido";
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = "Demasiados intentos fallidos. Intenta más tarde";
+            break;
+          default:
+            errorMessage = error.message;
+        }
+        
+        alert(errorMessage);
+      }
+    };
+
+    window.crearCuenta = async () => {
+      const email = document.getElementById("nuevoEmail").value.trim();
+      const username = document.getElementById("nuevoUsername").value.trim();
+      const password = document.getElementById("nuevoPassword").value.trim();
+      
+      if (!email || !username || !password) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      if (password.length < 6) {
+        alert("La contraseña debe tener al menos 6 caracteres.");
+        return;
+      }
+
+      setButtonsLoading(true);
+
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Crear perfil de usuario con los campos requeridos para el chat
+        await setDoc(doc(db, "users", userCred.user.uid), {
+          email: email,
+          username: username,
+          nick: username, // Campo requerido para el chat
+          avatar: 'https://via.placeholder.com/30?text=👤', // Avatar por defecto
+          url: ""
+        });
+        
+        // Redirigir al chat después de crear la cuenta
+        location.href = "chatweb.html";
+        
+      } catch (error) {
+        setButtonsLoading(false);
+        let errorMessage = "Error al crear cuenta";
+        
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = "Este correo ya está registrado";
+            break;
+          case 'auth/invalid-email':
+            errorMessage = "Correo electrónico inválido";
+            break;
+          case 'auth/weak-password':
+            errorMessage = "La contraseña es muy débil";
+            break;
+          default:
+            errorMessage = error.message;
+        }
+        
+        alert(errorMessage);
+      }
+    };
+
+    window.recuperarPassword = async () => {
+      const email = document.getElementById("recuperarEmail").value.trim();
+      
+      if (!email) {
+        alert("Por favor escribe tu correo.");
+        return;
+      }
+
+      setButtonsLoading(true);
+      
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Revisa tu correo para restablecer tu contraseña.");
+        cerrarRecuperacion();
+      } catch (error) {
+        let errorMessage = "Error al enviar email";
+        
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = "No existe una cuenta con este correo";
+            break;
+          case 'auth/invalid-email':
+            errorMessage = "Correo electrónico inválido";
+            break;
+          default:
+            errorMessage = error.message;
+        }
+        
+        alert(errorMessage);
+      } finally {
+        setButtonsLoading(false);
+      }
+    };
+
+    window.mostrarRegistro = () => {
+      document.getElementById("modalRegistro").style.display = "block";
+      document.getElementById("overlay").style.display = "block";
+    };
+
+    window.cerrarRegistro = () => {
+      document.getElementById("modalRegistro").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      setButtonsLoading(false);
+    };
+
+    window.mostrarRecuperacion = () => {
+      document.getElementById("modalRecuperar").style.display = "block";
+      document.getElementById("overlay").style.display = "block";
+    };
+
+    window.cerrarRecuperacion = () => {
+      document.getElementById("modalRecuperar").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      setButtonsLoading(false);
+    };
+
+    // Permitir login con Enter
+    document.getElementById('password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        login();
+      }
+    });
+
+    // Registrar Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log("SW registrado"))
+        .catch(err => console.error("SW error", err));
+    }
+  </script>
+</body>
+</html>
