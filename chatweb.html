@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Papoclub • PapoClub Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PWA: modo app fullscreen -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Papoclub">
+  <meta name="theme-color" content="#00917a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <style>
+    :root{--bg1:#006994;--bg2:#00b88a;--ink:#0ff;--card:rgba(0,0,0,.18);--ink2:#002f36}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--ink); display:flex; flex-direction:column;
+    }
+    header{
+      position: sticky; top:0; z-index:10; backdrop-filter: blur(6px);
+      background: linear-gradient(145deg, #00e5ff55, #0099cc55);
+      border-bottom: 1px solid #00e5ff44; padding: 12px 16px; display:flex; align-items:center; gap:12px;
+    }
+    header img{width:32px;height:32px;border-radius:50%; box-shadow:0 0 0 2px #00e5ff66}
+    header .grow{flex:1}
+    header .btn{background:#00e5ff;color:#003;border:none;padding:8px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+    header .btn:hover{filter:brightness(0.95)}
+
+    main{flex:1; display:flex; flex-direction:column; gap:12px; padding:12px;}
+
+    .card{background:var(--card); border-radius:16px; box-shadow:0 0 10px #00e5ff55; padding:12px; max-width:840px; width:100%; margin:0 auto}
+
+    .status{display:flex; align-items:center; gap:10px}
+    .status .dot{width:10px;height:10px;border-radius:50%; background:#f55}
+    .status.auth .dot{background:#4dff88}
+
+    /* Chat */
+    .chat-historial{flex:1; overflow-y:auto; max-height:58vh}
+    #mensajes{display:flex; flex-direction:column; gap:12px}
+    .msg{background:rgba(0,0,0,.3); border-radius:14px; padding:10px; box-shadow:0 0 6px #00e5ff44}
+    .msg .meta{font-size:.8em; color:#cde; opacity:.9; display:flex; align-items:center; gap:8px}
+    .msg img{width:22px;height:22px;border-radius:50%; vertical-align:middle}
+    .msg .texto{white-space:pre-wrap; word-wrap:break-word; color:#eaffff}
+
+    .chat-input{display:grid; grid-template-columns:1fr auto; gap:8px}
+    textarea{width:100%; min-height:44px; max-height:120px; resize:vertical; border:none; border-radius:12px; padding:10px; background:var(--ink2); color:var(--ink)}
+    button.send{background:#00e5ff; color:#003; border:none; padding:10px 18px; border-radius:12px; font-weight:800; cursor:pointer}
+    button.send:disabled{background:#678; color:#aac; cursor:not-allowed}
+    .help{font-size:.9em; opacity:.9}
+
+    .hidden{display:none !important}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>💬 Papotokens • Chat Público</strong>
+    <span class="grow"></span>
+    <div id="user-slot" class="status"><span class="dot"></span><span>Desconectado</span></div>
+    <button id="btnLogin" class="btn">Iniciar sesión</button>
+    <button id="btnLogout" class="btn hidden">Salir</button>
+  </header>
+
+  <main>
+    <!-- Estado / Ayuda -->
+    <section class="card">
+      <div class="help">
+        <p><strong>Nota:</strong> Para ver y enviar mensajes necesitas iniciar sesión. Una vez instalado como app (PWA), se abrirá en modo pantalla completa.</p>
+      </div>
+    </section>
+
+    <!-- Chat -->
+    <section class="card">
+      <h3 style="margin-top:0">Sala: público</h3>
+      <div class="chat-historial card" style="margin:8px 0">
+        <div id="mensajes"><div class="help">Cargando mensajes…</div></div>
+      </div>
+      <div class="chat-input">
+        <textarea id="msg" placeholder="Escribe un mensaje…" disabled></textarea>
+        <button id="btnSend" class="send" disabled>Enviar</button>
+      </div>
+      <div class="help">Anti‑spam: espera 2s entre envíos. URLs bloqueadas para no-admin.</div>
+    </section>
+  </main>
+
+  <script type="module">
+    // Firebase v10 modular
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, onSnapshot, query, orderBy,
+      doc, getDoc, setDoc, serverTimestamp, enableIndexedDbPersistence
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // Config de tu proyecto Papoclub
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJmOS9MjDhjJrKCMIUVbgmRiEi2xLIkrQ",
+      authDomain: "papoclub-737ac.firebaseapp.com",
+      projectId: "papoclub-737ac",
+      storageBucket: "papoclub-737ac.appspot.com",
+      messagingSenderId: "76712370993",
+      appId: "1:76712370993:web:2d2646b258efbccf68c73e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Habilitar caché offline para lecturas (opcional)
+    enableIndexedDbPersistence(db).catch(() => {/* puede fallar en incógnito */});
+
+    // UI refs
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const userSlot = document.getElementById('user-slot');
+    const mensajesEl = document.getElementById('mensajes');
+    const msg = document.getElementById('msg');
+    const btnSend = document.getElementById('btnSend');
+
+    let currentUser = null;
+    let sending = false;
+
+    // Auth state
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+
+      if (user) {
+        // UI
+        userSlot.classList.add('auth');
+        userSlot.innerHTML = `<span class="dot"></span><img src="${user.photoURL || 'https://via.placeholder.com/32?text=%F0%9F%91%A4'}" alt="avatar"/> <span>${user.displayName || user.email}</span>`;
+        btnLogin.classList.add('hidden');
+        btnLogout.classList.remove('hidden');
+        msg.disabled = false; btnSend.disabled = false;
+
+        // Asegurar doc de perfil mínimo para reglas de chat
+        const uref = doc(db, 'users', user.uid);
+        const snap = await getDoc(uref);
+        const defaultNick = (user.displayName?.trim()) || (user.email?.split('@')[0]) || 'user';
+        const defaultAvatar = user.photoURL || 'https://via.placeholder.com/30?text=%F0%9F%91%A4';
+        if (!snap.exists()) {
+          await setDoc(uref, { nick: defaultNick, avatar: defaultAvatar });
+        } else {
+          // Si faltan campos requeridos por reglas, complétalos
+          const d = snap.data();
+          const patch = {};
+          if (!d.nick) patch.nick = defaultNick;
+          if (!d.avatar) patch.avatar = defaultAvatar;
+          if (Object.keys(patch).length) await setDoc(uref, { ...d, ...patch });
+        }
+      } else {
+        userSlot.classList.remove('auth');
+        userSlot.innerHTML = '<span class="dot"></span><span>Desconectado</span>';
+        btnLogin.classList.remove('hidden');
+        btnLogout.classList.add('hidden');
+        msg.value = '';
+        msg.disabled = true; btnSend.disabled = true;
+      }
+    });
+
+    // Login/Logout handlers
+    btnLogin.addEventListener('click', async () => {
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+      } catch (e) {
+        alert('No se pudo iniciar sesión: ' + e.message);
+      }
+    });
+    btnLogout.addEventListener('click', async () => {
+      await signOut(auth);
+    });
+
+    // Escuchar mensajes públicos en tiempo real
+    const q = query(collection(db, 'chatPublico'), orderBy('fecha', 'asc'));
+    onSnapshot(q, (snap) => {
+      if (snap.empty) {
+        mensajesEl.innerHTML = '<div class="help">No hay mensajes todavía… ¡sé el primero!</div>';
+        return;
+      }
+      mensajesEl.innerHTML = '';
+      snap.forEach(docu => {
+        const m = docu.data();
+        // fecha
+        let f = 'Ahora';
+        if (m.fecha?.seconds) f = new Date(m.fecha.seconds * 1000).toLocaleString();
+        else if (m.fecha?.toDate) f = m.fecha.toDate().toLocaleString();
+
+        // nodo
+        const div = document.createElement('div');
+        div.className = 'msg';
+        div.innerHTML = `
+          <div class="meta">
+            <img src="${m.avatar || 'https://via.placeholder.com/22?text=%F0%9F%91%A4'}" onerror="this.src='https://via.placeholder.com/22?text=%F0%9F%91%A4'"/>
+            <strong>@${(m.nick || 'user')}</strong>
+            <span>• ${f}</span>
+          </div>
+          <div class="texto"></div>
+        `;
+        div.querySelector('.texto').textContent = m.texto || '';
+        mensajesEl.appendChild(div);
+      });
+      // scroll al final si es necesario
+      mensajesEl.parentElement.scrollTop = mensajesEl.parentElement.scrollHeight;
+    }, (err) => {
+      mensajesEl.innerHTML = `<div class="help">Error cargando mensajes: ${err.message}</div>`;
+    });
+
+    // Enviar mensaje
+    async function enviar(){
+      const texto = msg.value.trim();
+      if (!currentUser) { alert('Inicia sesión para enviar.'); return; }
+      if (!texto || sending) return;
+
+      // anti-URL para todos excepto admin
+      if (currentUser.email !== 'borincano@gmail.com' && /https?:\/\//i.test(texto)) {
+        msg.value = '';
+        alert('Mensaje con URL no permitido');
+        return;
+      }
+
+      try {
+        sending = true; btnSend.disabled = true;
+        // obtener perfil
+        const uref = doc(db, 'users', currentUser.uid);
+        const s = await getDoc(uref);
+        const perfil = s.exists() ? s.data() : {};
+        const nick = perfil.nick || currentUser.displayName || currentUser.email.split('@')[0];
+        const avatar = perfil.avatar || currentUser.photoURL || 'https://via.placeholder.com/30?text=%F0%9F%91%A4';
+
+        await addDoc(collection(db, 'chatPublico'), {
+          texto, uid: currentUser.uid, nick, avatar, fecha: serverTimestamp()
+        });
+        msg.value='';
+      } catch(e){
+        alert('No se pudo enviar: '+ e.message);
+      } finally {
+        // cooldown 2s
+        setTimeout(()=>{ sending=false; btnSend.disabled=false; }, 2000);
+      }
+    }
+
+    btnSend.addEventListener('click', enviar);
+    msg.addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); enviar(); }
+    });
+
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    }
+  </script>
+</body>
+</html>
