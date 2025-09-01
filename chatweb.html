@@ -235,7 +235,9 @@
         await addDoc(collection(db, 'chatPublico'), {
           texto, uid: currentUser.uid, nick, avatar, fecha: serverTimestamp()
         });
-        // La línea 'msg.value = '';' ha sido eliminada.
+
+        // Esta es la línea que borra el texto del campo de entrada.
+        msg.value = '';
       } catch(e){
         alert('No se pudo enviar: '+ e.message);
       } finally {
