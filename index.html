@@ -754,6 +754,1647 @@
             background: rgba(0, 191, 255, 0.2);
         }
 
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+            position: relative;
+            animation: modalAppear 0.5s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .modal-social-links,
+        .modal-email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-social-link,
+        .modal-email-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(16, 23, 41, 0.5);
+            border-radius: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .modal-social-link:hover,
+        .modal-email-link:hover {
+            background: rgba(0, 191, 255, 0.1);
+            transform: translateX(10px);
+            box-shadow: var(--glow);
+        }
+
+        .modal-social-link i,
+        .modal-email-link i {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 80px 1fr 350px;
+            }
+            .sidebar-left .logo-text, 
+            .nav-text, 
+            .profile-info {
+                display: none;
+            }
+            .logo-container {
+                padding: 10px;
+            }
+            .logo {
+                font-size: 1.8rem;
+            }
+            .nav-links a {
+                justify-content: center;
+                padding: 15px;
+            }
+            .nav-links a span {
+                display: none;
+            }
+            .post-btn span {
+                display: none;
+            }
+            .post-btn i {
+                margin-right: 0;
+            }
+            .profile-card {
+                display: none; /* PapoFundador is removed */
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "main"
+                    "right";
+            }
+            
+            .sidebar-left {
+                position: fixed;
+                left: -300px;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                z-index: 100;
+            }
+            
+            .sidebar-left.active {
+                transform: translateX(300px);
+            }
+            
+            .main-content {
+                grid-area: main;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            
+            .sidebar-right {
+                grid-area: right;
+                position: relative;
+                height: auto;
+                border-left: none;
+                border-top: 1px solid var(--card-border);
+                padding: 1.5rem;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .mobile-toggle {
+                display: flex;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .post-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-areas: 
+                    "main"
+                    "right";
+            }
+            
+            .post-form-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .post-form textarea {
+                height: 150px;
+            }
+            
+            .post-form-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .post-icons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .post-image {
+                height: 250px;
+                font-size: 1.2rem;
+            }
+            
+            .post-stats {
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .mobile-nav {
+                flex-wrap: wrap;
+            }
+            
+            .mobile-nav-item {
+                width: 25%;
+                margin-bottom: 5px;
+            }
+            
+            .mobile-nav-item:nth-child(4) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .post {
+                padding: 1.2rem;
+            }
+            
+            .post-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .post-user-info {
+                text-align: center;
+            }
+            
+            .post-text {
+                font-size: 1rem;
+            }
+            
+            .post-image {
+                height: 200px;
+            }
+            
+            .mobile-nav-item {
+                width: 33%;
+            }
+            
+            .mobile-nav-item:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="mobile-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div id="socialModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-share-alt"></i> Conéctate con PapoClub</h2>
+                <button class="close-modal" id="closeSocialModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-social-links">
+                <a href="https://t.me/PapoTokens82SE5Y2Vk" class="modal-social-link" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram: t.me/PapoTokens82SE5Y2Vk</span>
+                </a>
+                
+                <a href="https://x.com/papotokens" class="modal-social-link" target="_blank">
+                    <i class="fab fa-x-twitter"></i>
+                    <span>X.com: x.com/papotokens</span>
+                </a>
+                
+                <a href="https://www.papotokens.com" class="modal-social-link" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span>Sitio Web: www.papotokens.com</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-envelope"></i> Enviar Correo</h2>
+                <button class="close-modal" id="closeEmailModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-email-form">
+                <a href="mailto:papotokens@gmail.com?subject=Consulta%20desde%20PapoClub&body=Hola%20PapoClub,%0A%0AQuisiera%20consultar%20sobre..." class="modal-email-link">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Enviar correo a papotokens@gmail.com</span>
+                </a>
+                <p style="color: var(--text-secondary); text-align: center; margin-top: 10px;">
+                    Presiona el enlace para abrir tu cliente de correo electrónico.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-comments"></i> Iniciar Sesión en PapoChat</h2>
+                <button class="close-modal" id="closeLoginModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body" style="text-align: center;">
+                <p style="margin-bottom: 1.5rem; line-height: 1.6;">
+                    ¡Únete a la conversación! Para acceder al chat público, inicia sesión en la plataforma.
+                </p>
+                <a href="https://papodevs.github.io/Web/login.html" class="post-button" style="width: 100%; text-align: center; text-decoration: none; display: block;">
+                    Ir a la página de inicio de sesión
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar-left" id="leftSidebar">
+            <div>
+                <div class="logo-container">
+                    <div class="logo">PAPO</div>
+                    <div class="logo-subtitle">TOKEN CLUB</div>
+                </div>
+                
+                <ul class="nav-links">
+                    <li>
+                        <a href="#" id="homeLink">
+                            <i class="fas fa-home"></i>
+                            <span class="nav-text">Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="hashtagLink">
+                            <i class="fas fa-hashtag"></i>
+                            <span class="nav-text">Publicar en X</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="bellLink">
+                            <i class="fas fa-bell"></i>
+                            <span class="nav-text">Redes Sociales</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="messageLink">
+                            <i class="fas fa-envelope"></i>
+                            <span class="nav-text">Mensajes</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <button id="papoChatBtn" class="post-btn" style="width: 100%;">
+                    <i class="fas fa-comments"></i>
+                    <span>PapoChat</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>Últimas Publicaciones</h1>
+                <div class="header-actions">
+                    <button class="header-btn">
+                        <i class="fas fa-plus"></i> Crear Comunidad
+                    </button>
+                    <button class="header-btn">
+                        <i class="fas fa-coins"></i> Comprar Tokens
+                    </button>
+                </div>
+            </div>
+            
+            <div class="post-form">
+                <div class="post-form-content">
+                    <div class="avatar">T</div>
+                    <textarea placeholder="¿Qué está pasando en PapoClub?"></textarea>
+                </div>
+                <div class="post-form-footer">
+                    <div class="post-icons">
+                        <div class="post-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="post-icon">
+                            <i class="fas fa-poll"></i>
+                        </div>
+                        <div class="post-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="post-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                    <button class="post-button">Publicar</button>
+                </div>
+            </div>
+            
+            <div class="feed">
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">P</div>
+                        <div class="post-user-info">
+                            <h3>PapoClub</h3>
+                            <span>@papotokens · Hace 2 horas</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            <h2>🚀 Nuestra Historia</h2>
+                            <p>PapoClub nació de una visión: crear un espacio exclusivo donde los entusiastas de blockchain puedan compartir ideas y conocimientos. Lo que comenzó como un pequeño grupo de amigos apasionados por la tecnología ahora es una comunidad global de innovadores.</p>
+                            <p>Cada token PAPO representa una parte de esta comunidad y de nuestro viaje hacia la revolución digital.</p>
+                        </div>
+                        <div class="post-image">
+                            Historia de PapoClub
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="far fa-comment"></i>
+                            <span>42</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-retweet"></i>
+                            <span>78</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="far fa-heart"></i>
+                            <span>256</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">P</div>
+                        <div class="post-user-info">
+                            <h3>PapoClub</h3>
+                            <span>@papotokens · Hace 4 horas</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            <h2>📢 ¡Chat Público Disponible!</h2>
+                            <p>
+                                <strong>¡El chat público de PapoClub ya está activo!</strong> Ahora puedes conectarte con otros miembros, compartir ideas y ser parte de conversaciones en tiempo real.
+                                <br><br>
+                                **(EN)** Our public chat is now live! Join the conversation, share your ideas, and connect with other visionaries in real-time.
+                            </p>
+                            <p>Puedes acceder al chat desde el menú de la izquierda haciendo clic en **PapoChat**.</p>
+                        </div>
+                        <div class="post-image">
+                            
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="far fa-comment"></i>
+                            <span>36</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-retweet"></i>
+                            <span>94</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="far fa-heart"></i>
+                            <span>321</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">P</div>
+                        <div class="post-user-info">
+                            <h3>PapoClub</h3>
+                            <span>@papotokens · Hace 6 horas</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            <h2>🌐 Conéctate con Nosotros</h2>
+                            <p>¡Mantente conectado con la comunidad PapoClub a través de todas nuestras plataformas! Aquí es donde puedes encontrar las últimas actualizaciones, unirte a discusiones y participar en eventos exclusivos.</p>
+                        </div>
+                        <div class="post-image">
+                            Canales de Comunicación
+                        </div>
+                        <div class="post-text">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                                <div style="background: rgba(0, 191, 255, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--card-border);">
+                                    <h3 style="margin-bottom: 10px; color: var(--primary);"><i class="fab fa-telegram"></i> Telegram</h3>
+                                    <p>t.me/PapoTokens82SE5Y2Vk</p>
+                                </div>
+                                <div style="background: rgba(0, 191, 255, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--card-border);">
+                                    <h3 style="margin-bottom: 10px; color: var(--primary);"><i class="fab fa-x-twitter"></i> Twitter</h3>
+                                    <p>x.com/papotokens</p>
+                                </div>
+                                <div style="background: rgba(0, 191, 255, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--card-border);">
+                                    <h3 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-globe"></i> Sitio Web</h3>
+                                    <p>www.papotokens.com</p>
+                                </div>
+                                <div style="background: rgba(0, 191, 255, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--card-border);">
+                                    <h3 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-file-alt"></i> Whitepaper</h3>
+                                    <p>Descarga nuestro documento técnico</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="far fa-comment"></i>
+                            <span>28</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-retweet"></i>
+                            <span>63</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="far fa-heart"></i>
+                            <span>187</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-right" id="rightSidebar">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-comments"></i> PapoChat</h2>
+                <p style="margin-bottom: 1.5rem; line-height: 1.6;">
+                    ¡Únete a la conversación! Conéctate con la comunidad de PapoClub en nuestro chat público.
+                    <br><br>
+                    <strong>(EN)</strong> Welcome to PapoClub Chat! Join the conversation and connect with the community in our public chat.
+                </p>
+                <button id="openLoginModalBtn" class="post-button" style="width: 100%;">
+                    Iniciar Sesión
+                </button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-fire"></i> Tendencias</h2>
+                
+                <div class="trend-item">
+                    <div class="trend-category">
+                        <i class="fas fa-crypto"></i> Criptomonedas · Tendencia
+                    </div>
+                    <div class="trend-name">#PAPOTOKENS</div>
+                    <div class="trend-count">2.345 publicaciones</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">
+                        <i class="fas fa-chart-line"></i> Finanzas · Tendencia
+                    </div>
+                    <div class="trend-name">Preventa Privada</div>
+                    <div class="trend-count">1.876 publicaciones</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">
+                        <i class="fas fa-users"></i> Comunidad · Tendencia
+                    </div>
+                    <div class="trend-name">PapoClub</div>
+                    <div class="trend-count">1.542 publicaciones</div>
+                </div>
+                
+                <div class="trend-item">
+                    <div class="trend-category">
+                        <i class="fas fa-globe-americas"></i> España · Tendencia
+                    </div>
+                    <div class="trend-name">#TokenSocial</div>
+                    <div class="trend-count">945 publicaciones</div>
+                </div>
+                
+                <div class="show-more">Mostrar más tendencias</div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-chart-bar"></i> Estadísticas</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">2B</div>
+                        <div class="stat-label">Tokens</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">14K</div>
+                        <div class="stat-label">Miembros</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">86%</div>
+                        <div class="stat-label">Preventa</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">Genesis</div>
+                        <div class="stat-label">Blockchain</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-rocket"></i> Enlaces Rápidos</h2>
+                
+                <div class="social-links">
+                    <a href="https://t.me/PapoTokens82SE5Y2Vk" class="social-link" target="_blank">
+                        <i class="fab fa-telegram"></i> Telegram Oficial
+                    </a>
+                    <a href="https://x.com/papotokens" class="social-link" target="_blank">
+                        <i class="fab fa-x-twitter"></i> Twitter Oficial
+                    </a>
+                    <a href="https://www.papotokens.com" class="social-link" target="_blank">
+                        <i class="fas fa-globe"></i> Sitio Web
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fas fa-file-contract"></i> Whitepaper
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-gem"></i> PapoClub Premium</h2>
+                <p style="margin-bottom: 1.5rem; line-height: 1.6;">
+                    Conviértete en miembro premium para acceder a características exclusivas, eventos privados y beneficios especiales dentro de la comunidad.
+                </p>
+                <button class="post-button" style="width: 100%;">Actualizar Ahora</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-menu">
+        <div class="mobile-nav">
+            <a href="#" class="mobile-nav-item active" id="mobileHome">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="#" class="mobile-nav-item" id="mobileHashtag">
+                <i class="fas fa-hashtag"></i>
+                <span>Publicar en X</span>
+            </a>
+            <a href="#" class="mobile-nav-item" id="mobileBell">
+                <i class="fas fa-bell"></i>
+                <span>Redes</span>
+            </a>
+            <a href="#" class="mobile-nav-item" id="mobileMessage">
+                <i class="fas fa-envelope"></i>
+                <span>Mensajes</span>
+            </a>
+            <a href="#" class="mobile-nav-item" id="mobileChat">
+                <i class="fas fa-comments"></i>
+                <span>PapoChat</span>
+            </a>
+            <a href="#" class="mobile-nav-item">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>Más</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Inicialización de partículas
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: window.innerWidth < 768 ? 40 : 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#00BFFF" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.3, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#00BFFF",
+                        opacity: 0.1,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" },
+                        resize: true
+                    },
+                    modes: {
+                        repulse: { distance: 100, duration: 0.4 },
+                        push: { particles_nb: 4 }
+                    }
+                },
+                retina_detect: true
+            });
+
+            // Funcionalidades específicas solicitadas
+            const homeLink = document.getElementById('homeLink');
+            const mobileHome = document.getElementById('mobileHome');
+            const hashtagLink = document.getElementById('hashtagLink');
+            const mobileHashtag = document.getElementById('mobileHashtag');
+            const bellLink = document.getElementById('bellLink');
+            const mobileBell = document.getElementById('mobileBell');
+            const messageLink = document.getElementById('messageLink');
+            const mobileMessage = document.getElementById('mobileMessage');
+            
+            const papoChatBtn = document.getElementById('papoChatBtn');
+            const openLoginModalBtn = document.getElementById('openLoginModalBtn');
+            const mobileChat = document.getElementById('mobileChat');
+
+            const socialModal = document.getElementById('socialModal');
+            const closeModalSocial = document.getElementById('closeSocialModal');
+            
+            const emailModal = document.getElementById('emailModal');
+            const closeModalEmail = document.getElementById('closeEmailModal');
+
+            const loginModal = document.getElementById('loginModal');
+            const closeLoginModal = document.getElementById('closeLoginModal');
+
+            // Funcionalidad: Volver al inicio
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+            
+            if(homeLink) homeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                scrollToTop();
+            });
+            
+            if(mobileHome) mobileHome.addEventListener('click', function(e) {
+                e.preventDefault();
+                scrollToTop();
+            });
+            
+            // Funcionalidad: Publicar en X.com
+            function postToTwitter() {
+                const text = encodeURIComponent("🚀 ¡Estoy apoyando a PapoClub! La comunidad tokenizada del futuro. Únete a la revolución digital con nosotros. #PapoClub #Crypto #Blockchain");
+                window.open(`https://x.com/intent/tweet?text=${text}`, '_blank');
+            }
+            
+            if(hashtagLink) hashtagLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                postToTwitter();
+            });
+            
+            if(mobileHashtag) mobileHashtag.addEventListener('click', function(e) {
+                e.preventDefault();
+                postToTwitter();
+            });
+            
+            // Funcionalidad: Mostrar modal de redes sociales
+            function showSocialModal() {
+                if(socialModal) socialModal.style.display = 'flex';
+            }
+            
+            function hideSocialModal() {
+                if(socialModal) socialModal.style.display = 'none';
+            }
+            
+            if(bellLink) bellLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSocialModal();
+            });
+            
+            if(mobileBell) mobileBell.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSocialModal();
+            });
+            
+            if(closeModalSocial) closeModalSocial.addEventListener('click', hideSocialModal);
+            
+            // Cerrar modal de redes sociales al hacer clic fuera del contenido
+            if(socialModal) socialModal.addEventListener('click', function(e) {
+                if (e.target === socialModal) {
+                    hideSocialModal();
+                }
+            });
+            
+            // Funcionalidad: Mostrar modal de email
+            function showEmailModal() {
+                if(emailModal) emailModal.style.display = 'flex';
+            }
+
+            function hideEmailModal() {
+                if(emailModal) emailModal.style.display = 'none';
+            }
+            
+            if(messageLink) messageLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showEmailModal();
+            });
+
+            if(mobileMessage) mobileMessage.addEventListener('click', function(e) {
+                e.preventDefault();
+                showEmailModal();
+            });
+            
+            if(closeModalEmail) closeModalEmail.addEventListener('click', hideEmailModal);
+            
+            // Cerrar modal de email al hacer clic fuera del contenido
+            if(emailModal) emailModal.addEventListener('click', function(e) {
+                if (e.target === emailModal) {
+                    hideEmailModal();
+                }
+            });
+
+            // Nueva funcionalidad: Mostrar modal de login
+            function showLoginModal() {
+                if(loginModal) loginModal.style.display = 'flex';
+            }
+
+            function hideLoginModal() {
+                if(loginModal) loginModal.style.display = 'none';
+            }
+
+            if(papoChatBtn) papoChatBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginModal();
+            });
+
+            if(openLoginModalBtn) openLoginModalBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginModal();
+            });
+            
+            if(mobileChat) mobileChat.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginModal();
+            });
+
+            if(closeLoginModal) closeLoginModal.addEventListener('click', hideLoginModal);
+            
+            // Cerrar modal de login al hacer clic fuera del contenido
+            if(loginModal) loginModal.addEventListener('click', function(e) {
+                if (e.target === loginModal) {
+                    hideLoginModal();
+                }
+            });
+
+            // Menú móvil
+            const menuToggle = document.getElementById('menuToggle');
+            const leftSidebar = document.getElementById('leftSidebar');
+            
+            if(menuToggle) menuToggle.addEventListener('click', () => {
+                leftSidebar.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                if (!leftSidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    leftSidebar.classList.remove('active');
+                }
+            });
+        });
+        
+        // Optimización para redimensionamiento
+        window.addEventListener('resize', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: window.innerWidth < 768 ? 40 : 80 }
+                }
+            });
+        });
+    </script>
+</body>
+</html>            perspective: 1000px;
+        }
+
+        /* Fondo animado con partículas */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Layout principal */
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr 350px;
+            min-height: 100vh;
+            max-width: 2000px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar izquierdo */
+        .sidebar-left {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 23, 0.8);
+            z-index: 10;
+            transition: transform 0.4s ease;
+        }
+
+        .logo-container {
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin-bottom: 3rem;
+        }
+
+        .nav-links li {
+            margin-bottom: 1.2rem;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--glow);
+            transform: translateX(10px);
+        }
+
+        .nav-links a i {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links .active {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--glow);
+        }
+
+        .post-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 98, 163, 0.4);
+            margin-bottom: 2rem;
+        }
+
+        .post-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 98, 163, 0.6);
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--glow);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 191, 255, 0.5);
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .profile-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+
+        .profile-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Contenido principal */
+        .main-content {
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-btn:hover {
+            background: rgba(0, 191, 255, 0.1);
+            box-shadow: var(--glow);
+        }
+
+        .post-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .post-form:hover {
+            box-shadow: var(--glow);
+        }
+
+        .post-form-content {
+            display: flex;
+            gap: 15px;
+        }
+
+        .post-form .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        .post-form textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1.2rem;
+            resize: none;
+            height: 100px;
+            padding: 10px;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .post-form textarea:focus {
+            outline: none;
+        }
+
+        .post-form textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .post-form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .post-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .post-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+
+        .post-icon:hover {
+            background: rgba(0, 191, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .post-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 98, 163, 0.4);
+        }
+
+        .post-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 98, 163, 0.6);
+        }
+
+        /* Feed de publicaciones */
+        .feed {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .post {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.8rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            z-index: -1;
+            border-radius: 22px;
+            opacity: 0.3;
+        }
+
+        .post:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--glow);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .post-user-info h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .post-user-info span {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .post-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .post-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            position: relative;
+            height: 400px;
+            background: linear-gradient(45deg, #0a0e17, #1a2a4a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .post-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 191, 255, 0.1), rgba(122, 0, 255, 0.1));
+            z-index: 1;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+
+        .post-stat:hover {
+            background: rgba(0, 191, 255, 0.1);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .post-stat i {
+            font-size: 1.3rem;
+        }
+
+        /* Sidebar derecho */
+        .sidebar-right {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            border-left: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 23, 0.8);
+            z-index: 10;
+            transition: transform 0.4s ease;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), var(--glow);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            z-index: -1;
+            border-radius: 22px;
+            opacity: 0.3;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .trend-item {
+            padding: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .trend-item:last-child {
+            border-bottom: none;
+        }
+
+        .trend-item:hover {
+            transform: translateX(5px);
+        }
+
+        .trend-category {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .trend-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .trend-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(16, 23, 41, 0.5);
+            border-radius: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .social-link:hover {
+            background: rgba(0, 191, 255, 0.1);
+            transform: translateX(10px);
+            box-shadow: var(--glow);
+        }
+
+        .social-link i {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .show-more {
+            color: var(--primary);
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 10px;
+            border-radius: 15px;
+            border: 1px solid var(--card-border);
+        }
+
+        .show-more:hover {
+            background: rgba(0, 191, 255, 0.1);
+            box-shadow: var(--glow);
+        }
+
+        /* Animaciones */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .post, .card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(16, 23, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--card-border);
+            z-index: 100;
+            padding: 12px;
+        }
+
+        .mobile-nav {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            padding: 8px 12px;
+            border-radius: 15px;
+        }
+
+        .mobile-nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mobile-nav-item.active {
+            background: rgba(0, 191, 255, 0.1);
+        }
+
+        .mobile-nav-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(16, 23, 41, 0.8);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            z-index: 101;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--glow);
+            transition: all 0.3s;
+        }
+
+        .mobile-toggle:hover {
+            transform: rotate(90deg);
+            background: rgba(0, 191, 255, 0.2);
+        }
+
         /* Social Modal - CORREGIDO */
         #socialModal {
             display: none;
