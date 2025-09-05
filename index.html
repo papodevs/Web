@@ -746,88 +746,6 @@
             background: rgba(0, 191, 255, 0.2);
         }
 
-        /* --- Estilos para la tarjeta de chat (nueva) --- */
-        .chat-card {
-            display: none; /* Oculto por defecto */
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 90%;
-            max-width: 400px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
-            z-index: 999;
-            transform: translateY(100%);
-            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-            opacity: 0;
-        }
-        
-        .chat-card.visible {
-            display: block;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .chat-header h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .close-chat {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .close-chat:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
-
-        .chat-body p {
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            color: var(--text);
-        }
-
-        .chat-body a {
-            display: block;
-            width: 100%;
-            text-align: center;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 98, 163, 0.4);
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .chat-body a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 98, 163, 0.6);
-        }
-
-        /* --- Fin de estilos de la tarjeta de chat --- */
-
         /* Modals existentes */
         .modal {
             display: none;
@@ -924,6 +842,82 @@
             background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        
+        /* Estilos adicionales para los formularios de login y chat */
+        .login-chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .login-chat-container input, .login-chat-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .login-chat-container input {
+            border: 1px solid var(--card-border);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+        }
+        .login-chat-container button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 98, 163, 0.4);
+        }
+        .login-chat-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 98, 163, 0.6);
+        }
+        .login-chat-container button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .login-chat-container .wallet-btn {
+            background: #444;
+            color: #888;
+            font-size: 0.85em;
+            padding: 8px;
+            margin-top: 5px;
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: none;
+        }
+        .login-chat-container a {
+            color: var(--primary);
+            display: block;
+            margin-top: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .login-chat-container .loading {
+            opacity: 0.7;
+        }
+        #messagesContainer {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text);
+            text-align: left;
+            word-wrap: break-word;
+        }
+        #messagesContainer p {
+            margin: 5px 0;
         }
 
         /* Responsive */
@@ -1077,11 +1071,6 @@
             .mobile-nav-item:nth-child(4) {
                 display: none;
             }
-            
-            .chat-card {
-                width: calc(100% - 40px);
-                left: 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1169,23 +1158,6 @@
                     Presiona el enlace para abrir tu cliente de correo electrónico.
                 </p>
             </div>
-        </div>
-    </div>
-
-    <div id="chatCard" class="chat-card">
-        <div class="chat-header">
-            <h2><i class="fas fa-comments"></i> PapoChat</h2>
-            <button class="close-chat" id="closeChatCard">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="chat-body">
-            <p>
-                ¡Únete a la conversación! Para acceder al chat público, inicia sesión en la plataforma.
-            </p>
-            <a href="https://papodevs.github.io/Web/login.html" class="post-button">
-                Ir a la página de inicio de sesión
-            </a>
         </div>
     </div>
 
@@ -1406,16 +1378,24 @@
         </div>
 
         <div class="sidebar-right" id="rightSidebar">
-            <div class="card">
-                <h2 class="card-title"><i class="fas fa-comments"></i> PapoChat</h2>
-                <p style="margin-bottom: 1.5rem; line-height: 1.6;">
-                    ¡Únete a la conversación! Conéctate con la comunidad de PapoClub en nuestro chat público.
-                    <br><br>
-                    <strong>(EN)</strong> Welcome to PapoClub Chat! Join the conversation and connect with the community in our public chat.
-                </p>
-                <button id="openChatCardBtn" class="post-button" style="width: 100%;">
-                    Iniciar Sesión
-                </button>
+            <div class="card login-chat-container">
+                <div id="loginCard" style="width: 100%;">
+                    <h2 class="card-title"><i class="fas fa-comments"></i> PapoChat</h2>
+                    <input type="email" id="email" placeholder="Correo electrónico" />
+                    <input type="password" id="password" placeholder="Contraseña" />
+                    <button id="btnLogin" onclick="login()">Entrar</button>
+                    <button class="wallet-btn" disabled title="Próximamente disponible">🔗 Connect Wallet</button>
+                    <a onclick="mostrarRegistro()">Crear cuenta nueva</a>
+                    <a onclick="mostrarRecuperacion()">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <div id="chatCard" style="display:none; width: 100%;">
+                    <h2 class="card-title"><i class="fas fa-comments"></i> PapoChat</h2>
+                    <div id="messagesContainer"></div>
+                    <input type="text" id="messageInput" placeholder="Escribe tu mensaje..." />
+                    <button id="sendMessageBtn">Enviar</button>
+                    <button id="logoutBtn">Cerrar Sesión</button>
+                </div>
             </div>
             
             <div class="card">
@@ -1508,6 +1488,36 @@
         </div>
     </div>
 
+    <div class="modal" id="modalRegistro">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Crear nueva cuenta</h2>
+                <button class="close-modal" onclick="cerrarRegistro()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <input type="email" id="nuevoEmail" placeholder="Correo electrónico" />
+            <input type="text" id="nuevoUsername" placeholder="Nombre de usuario" />
+            <input type="password" id="nuevoPassword" placeholder="Contraseña" />
+            <button id="btnCrear" onclick="crearCuenta()">Crear</button>
+            <a onclick="cerrarRegistro()">Cancelar</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalRecuperar">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-lock"></i> Recuperar contraseña</h2>
+                <button class="close-modal" onclick="cerrarRecuperacion()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <input type="email" id="recuperarEmail" placeholder="Tu correo registrado" />
+            <button id="btnRecuperar" onclick="recuperarPassword()">Enviar enlace</button>
+            <a onclick="cerrarRecuperacion()">Cancelar</a>
+        </div>
+    </div>
+
     <div class="mobile-menu">
         <div class="mobile-nav">
             <a href="#" class="mobile-nav-item active" id="mobileHome">
@@ -1538,7 +1548,206 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import {
+          getAuth,
+          signInWithEmailAndPassword,
+          createUserWithEmailAndPassword,
+          sendPasswordResetEmail,
+          onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+          getFirestore,
+          setDoc,
+          doc,
+          collection,
+          addDoc,
+          query,
+          orderBy,
+          onSnapshot,
+          getDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // --- Configuración y Variables ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyCJmOS9MjDhjJrKCMIUVbgmRiEi2xLIkrQ",
+          authDomain: "papoclub-737ac.firebaseapp.com",
+          projectId: "papoclub-737ac",
+          storageBucket: "papoclub-737ac.appspot.com",
+          messagingSenderId: "76712370993",
+          appId: "1:76712370993:web:2d2646b258efbccf68c73e"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const loginCard = document.getElementById("loginCard");
+        const chatCard = document.getElementById("chatCard");
+        const messagesContainer = document.getElementById("messagesContainer");
+        const messageInput = document.getElementById("messageInput");
+        const sendMessageBtn = document.getElementById("sendMessageBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        let currentUser = null;
+
+        // --- Funciones para la interfaz (Login/Chat) ---
+        function setButtonsLoading(loading) {
+            const buttons = ['btnLogin', 'btnCrear', 'btnRecuperar'];
+            buttons.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.disabled = loading;
+                    if (loading) btn.classList.add('loading');
+                    else btn.classList.remove('loading');
+                }
+            });
+        }
+
+        function showChatInterface() {
+            loginCard.style.display = "none";
+            chatCard.style.display = "block";
+            setupChatListeners();
+        }
+
+        function showLoginInterface() {
+            chatCard.style.display = "none";
+            loginCard.style.display = "block";
+        }
+
+        // --- Lógica de Autenticación ---
+        window.login = async () => {
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value;
+          if (!email || !password) {
+            alert("Por favor ingresa correo y contraseña");
+            return;
+          }
+          setButtonsLoading(true);
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+          } catch (error) {
+            setButtonsLoading(false);
+            let errorMessage = "Error al iniciar sesión";
+            switch (error.code) {
+              case 'auth/user-not-found': errorMessage = "Usuario no encontrado"; break;
+              case 'auth/wrong-password': errorMessage = "Contraseña incorrecta"; break;
+              case 'auth/invalid-email': errorMessage = "Correo electrónico inválido"; break;
+              case 'auth/too-many-requests': errorMessage = "Demasiados intentos. Intenta más tarde"; break;
+              default: errorMessage = error.message;
+            }
+            alert(errorMessage);
+          }
+        };
+
+        window.crearCuenta = async () => {
+          const email = document.getElementById("nuevoEmail").value.trim();
+          const username = document.getElementById("nuevoUsername").value.trim();
+          const password = document.getElementById("nuevoPassword").value.trim();
+          if (!email || !username || !password) {
+            alert("Completa todos los campos.");
+            return;
+          }
+          if (password.length < 6) {
+            alert("La contraseña debe tener al menos 6 caracteres.");
+            return;
+          }
+          setButtonsLoading(true);
+          try {
+            const userCred = await createUserWithEmailAndPassword(auth, email, password);
+            await setDoc(doc(db, "users", userCred.user.uid), {
+              email: email,
+              username: username,
+              nick: username,
+              avatar: 'https://via.placeholder.com/30?text=👤',
+              url: ""
+            });
+            cerrarRegistro();
+          } catch (error) {
+            setButtonsLoading(false);
+            let errorMessage = "Error al crear cuenta";
+            switch (error.code) {
+              case 'auth/email-already-in-use': errorMessage = "Este correo ya está registrado"; break;
+              case 'auth/invalid-email': errorMessage = "Correo electrónico inválido"; break;
+              case 'auth/weak-password': errorMessage = "La contraseña es muy débil"; break;
+              default: errorMessage = error.message;
+            }
+            alert(errorMessage);
+          }
+        };
+
+        window.recuperarPassword = async () => {
+          const email = document.getElementById("recuperarEmail").value.trim();
+          if (!email) {
+            alert("Por favor escribe tu correo.");
+            return;
+          }
+          setButtonsLoading(true);
+          try {
+            await sendPasswordResetEmail(auth, email);
+            alert("Revisa tu correo para restablecer tu contraseña.");
+            cerrarRecuperacion();
+          } catch (error) {
+            let errorMessage = "Error al enviar email";
+            switch (error.code) {
+              case 'auth/user-not-found': errorMessage = "No existe una cuenta con este correo"; break;
+              case 'auth/invalid-email': errorMessage = "Correo electrónico inválido"; break;
+              default: errorMessage = error.message;
+            }
+            alert(errorMessage);
+          } finally {
+            setButtonsLoading(false);
+          }
+        };
+
+        // --- Lógica del Chat ---
+        async function sendMessage() {
+          const messageText = messageInput.value.trim();
+          if (messageText === "" || !currentUser) return;
+
+          try {
+            const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+            const username = userDoc.exists() ? userDoc.data().username : "Anónimo";
+
+            await addDoc(collection(db, "messages"), {
+              text: messageText,
+              uid: currentUser.uid,
+              username: username,
+              timestamp: Date.now()
+            });
+            messageInput.value = "";
+          } catch (e) {
+            console.error("Error al enviar el mensaje: ", e);
+          }
+        }
+
+        function setupChatListeners() {
+          const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+          onSnapshot(q, (snapshot) => {
+            messagesContainer.innerHTML = "";
+            snapshot.forEach((doc) => {
+              const msg = doc.data();
+              const p = document.createElement("p");
+              p.textContent = `${msg.username}: ${msg.text}`;
+              messagesContainer.appendChild(p);
+            });
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          });
+        }
+        
+        // --- Escucha del Estado de Autenticación (Motor principal) ---
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            currentUser = user;
+            showChatInterface();
+          } else {
+            currentUser = null;
+            showLoginInterface();
+            setButtonsLoading(false);
+          }
+        });
+
+        // --- Eventos de UI ---
         document.addEventListener('DOMContentLoaded', function() {
             particlesJS('particles-js', {
                 particles: {
@@ -1589,7 +1798,6 @@
             const mobileMessage = document.getElementById('mobileMessage');
             
             const papoChatBtn = document.getElementById('papoChatBtn');
-            const openChatCardBtn = document.getElementById('openChatCardBtn');
             const mobileChat = document.getElementById('mobileChat');
 
             const socialModal = document.getElementById('socialModal');
@@ -1597,10 +1805,7 @@
             
             const emailModal = document.getElementById('emailModal');
             const closeModalEmail = document.getElementById('closeEmailModal');
-
-            const chatCard = document.getElementById('chatCard');
-            const closeChatCard = document.getElementById('closeChatCard');
-
+            
             function scrollToTop() {
                 window.scrollTo({
                     top: 0,
@@ -1608,130 +1813,47 @@
                 });
             }
             
-            if(homeLink) homeLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                scrollToTop();
-            });
-            
-            if(mobileHome) mobileHome.addEventListener('click', function(e) {
-                e.preventDefault();
-                scrollToTop();
-            });
+            if(homeLink) homeLink.addEventListener('click', function(e) { e.preventDefault(); scrollToTop(); });
+            if(mobileHome) mobileHome.addEventListener('click', function(e) { e.preventDefault(); scrollToTop(); });
             
             function postToTwitter() {
                 const text = encodeURIComponent("🚀 ¡Estoy apoyando a PapoClub! La comunidad tokenizada del futuro. Únete a la revolución digital con nosotros. #PapoClub #Crypto #Blockchain");
                 window.open(`https://x.com/intent/tweet?text=${text}`, '_blank');
             }
             
-            if(hashtagLink) hashtagLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                postToTwitter();
-            });
+            if(hashtagLink) hashtagLink.addEventListener('click', function(e) { e.preventDefault(); postToTwitter(); });
+            if(mobileHashtag) mobileHashtag.addEventListener('click', function(e) { e.preventDefault(); postToTwitter(); });
             
-            if(mobileHashtag) mobileHashtag.addEventListener('click', function(e) {
-                e.preventDefault();
-                postToTwitter();
-            });
+            function showSocialModal() { if(socialModal) socialModal.style.display = 'flex'; }
+            function hideSocialModal() { if(socialModal) socialModal.style.display = 'none'; }
             
-            function showSocialModal() {
-                if(socialModal) socialModal.style.display = 'flex';
-            }
-            
-            function hideSocialModal() {
-                if(socialModal) socialModal.style.display = 'none';
-            }
-            
-            if(bellLink) bellLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                showSocialModal();
-            });
-            
-            if(mobileBell) mobileBell.addEventListener('click', function(e) {
-                e.preventDefault();
-                showSocialModal();
-            });
-            
+            if(bellLink) bellLink.addEventListener('click', function(e) { e.preventDefault(); showSocialModal(); });
+            if(mobileBell) mobileBell.addEventListener('click', function(e) { e.preventDefault(); showSocialModal(); });
             if(closeModalSocial) closeModalSocial.addEventListener('click', hideSocialModal);
+            if(socialModal) socialModal.addEventListener('click', function(e) { if (e.target === socialModal) { hideSocialModal(); } });
             
-            if(socialModal) socialModal.addEventListener('click', function(e) {
-                if (e.target === socialModal) {
-                    hideSocialModal();
-                }
-            });
+            function showEmailModal() { if(emailModal) emailModal.style.display = 'flex'; }
+            function hideEmailModal() { if(emailModal) emailModal.style.display = 'none'; }
             
-            function showEmailModal() {
-                if(emailModal) emailModal.style.display = 'flex';
-            }
-
-            function hideEmailModal() {
-                if(emailModal) emailModal.style.display = 'none';
-            }
-            
-            if(messageLink) messageLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                showEmailModal();
-            });
-
-            if(mobileMessage) mobileMessage.addEventListener('click', function(e) {
-                e.preventDefault();
-                showEmailModal();
-            });
-            
+            if(messageLink) messageLink.addEventListener('click', function(e) { e.preventDefault(); showEmailModal(); });
+            if(mobileMessage) mobileMessage.addEventListener('click', function(e) { e.preventDefault(); showEmailModal(); });
             if(closeModalEmail) closeModalEmail.addEventListener('click', hideEmailModal);
+            if(emailModal) emailModal.addEventListener('click', function(e) { if (e.target === emailModal) { hideEmailModal(); } });
             
-            if(emailModal) emailModal.addEventListener('click', function(e) {
-                if (e.target === emailModal) {
-                    hideEmailModal();
-                }
-            });
-
-            // Nueva funcionalidad para la tarjeta de chat
-            function showChatCard() {
-                if(chatCard) {
-                    chatCard.classList.add('visible');
-                    // Desactivar el scroll del cuerpo para evitar que se mueva la página
-                    document.body.style.overflow = 'hidden';
-                }
-            }
+            // Botones que muestran el chat/login
+            if(papoChatBtn) papoChatBtn.addEventListener('click', () => { showLoginInterface(); });
+            if(mobileChat) mobileChat.addEventListener('click', () => { showLoginInterface(); });
             
-            function hideChatCard() {
-                if(chatCard) {
-                    chatCard.classList.remove('visible');
-                    // Habilitar el scroll del cuerpo nuevamente
-                    document.body.style.overflow = '';
-                }
-            }
-
-            if(papoChatBtn) papoChatBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                showChatCard();
-            });
-
-            if(openChatCardBtn) openChatCardBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                showChatCard();
-            });
-            
-            if(mobileChat) mobileChat.addEventListener('click', function(e) {
-                e.preventDefault();
-                showChatCard();
-            });
-
-            if(closeChatCard) closeChatCard.addEventListener('click', hideChatCard);
-            
-            // Cerrar la tarjeta al hacer clic fuera
-            document.addEventListener('click', function(e) {
-                if(chatCard && chatCard.classList.contains('visible') && !chatCard.contains(e.target) && e.target !== papoChatBtn && e.target !== openChatCardBtn && e.target !== mobileChat) {
-                    hideChatCard();
-                }
-            });
+            // Lógica de los botones del chat
+            if(sendMessageBtn) sendMessageBtn.addEventListener('click', sendMessage);
+            if(messageInput) messageInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { sendMessage(); } });
+            if(logoutBtn) logoutBtn.addEventListener('click', () => { auth.signOut(); });
+            if(document.getElementById('password')) document.getElementById('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') { window.login(); } });
 
             const menuToggle = document.getElementById('menuToggle');
             const leftSidebar = document.getElementById('leftSidebar');
             
-            if(menuToggle) menuToggle.addEventListener('click', () => {
-                leftSidebar.classList.toggle('active');
-            });
+            if(menuToggle) menuToggle.addEventListener('click', () => { leftSidebar.classList.toggle('active'); });
             
             document.addEventListener('click', (e) => {
                 if (!leftSidebar.contains(e.target) && !menuToggle.contains(e.target)) {
@@ -1747,6 +1869,15 @@
                 }
             });
         });
+        
+        window.mostrarRegistro = () => { document.getElementById("modalRegistro").style.display = "flex"; };
+        window.cerrarRegistro = () => { document.getElementById("modalRegistro").style.display = "none"; setButtonsLoading(false); };
+        window.mostrarRecuperacion = () => { document.getElementById("modalRecuperar").style.display = "flex"; };
+        window.cerrarRecuperacion = () => { document.getElementById("modalRecuperar").style.display = "none"; setButtonsLoading(false); };
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(reg => console.log("SW registrado")).catch(err => console.error("SW error", err));
+        }
     </script>
 </body>
 </html>
