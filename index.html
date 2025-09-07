@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos existentes (mantenidos igual) */
         * {
             margin: 0;
             padding: 0;
@@ -713,7 +714,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .mobile-nav-item.active {
+        .mobile-nav-item active {
             background: rgba(0, 191, 255, 0.1);
         }
 
@@ -844,7 +845,7 @@
             -webkit-text-fill-color: transparent;
         }
         
-        /* Estilos adicionales para los formularios de login y chat */
+        /* Estilos para el chat mejorados */
         .login-chat-container {
             display: flex;
             flex-direction: column;
@@ -853,7 +854,7 @@
         }
         .login-chat-container input, .login-chat-container button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 8px 0;
             border-radius: 8px;
             font-size: 1em;
@@ -863,6 +864,11 @@
             border: 1px solid var(--card-border);
             background: rgba(0, 0, 0, 0.3);
             color: var(--text);
+        }
+        .login-chat-container input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 5px var(--primary);
         }
         .login-chat-container button {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
@@ -915,9 +921,35 @@
             color: var(--text);
             text-align: left;
             word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         #messagesContainer p {
             margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-break: break-word;
+        }
+        .message-self {
+            background: rgba(0, 191, 255, 0.2);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .message-other {
+            background: rgba(122, 0, 255, 0.2);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .message-info {
+            font-size: 0.7em;
+            color: var(--text-secondary);
+            margin-top: 3px;
+            text-align: right;
+        }
+        .message-other .message-info {
+            text-align: left;
         }
 
         /* Responsive */
@@ -1555,7 +1587,8 @@
           signInWithEmailAndPassword,
           createUserWithEmailAndPassword,
           sendPasswordResetEmail,
-          onAuthStateChanged
+          onAuthStateChanged,
+          signOut
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
           getFirestore,
@@ -1566,7 +1599,8 @@
           query,
           orderBy,
           onSnapshot,
-          getDoc
+          getDoc,
+          serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // --- Configuración y Variables ---
@@ -1578,6 +1612,7 @@
           messagingSenderId: "76712370993",
           appId: "1:76712370993:web:2d2646b258efbccf68c73e"
         };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -1660,8 +1695,10 @@
               username: username,
               nick: username,
               avatar: 'https://via.placeholder.com/30?text=👤',
-              url: ""
+              url: "",
+              createdAt: serverTimestamp()
             });
+            alert("Cuenta creada exitosamente. Ya puedes iniciar sesión.");
             cerrarRegistro();
           } catch (error) {
             setButtonsLoading(false);
@@ -1713,11 +1750,12 @@
               text: messageText,
               uid: currentUser.uid,
               username: username,
-              timestamp: Date.now()
+              timestamp: serverTimestamp()
             });
             messageInput.value = "";
           } catch (e) {
             console.error("Error al enviar el mensaje: ", e);
+            alert("Error al enviar el mensaje. Intenta de nuevo.");
           }
         }
 
@@ -1727,11 +1765,34 @@
             messagesContainer.innerHTML = "";
             snapshot.forEach((doc) => {
               const msg = doc.data();
-              const p = document.createElement("p");
-              p.textContent = `${msg.username}: ${msg.text}`;
-              messagesContainer.appendChild(p);
+              const messageElement = document.createElement("div");
+              messageElement.classList.add("message");
+              
+              // Determinar si es nuestro mensaje o de otro usuario
+              if (msg.uid === currentUser.uid) {
+                messageElement.classList.add("message-self");
+              } else {
+                messageElement.classList.add("message-other");
+              }
+              
+              // Formatear la hora si está disponible
+              let timeString = "";
+              if (msg.timestamp) {
+                const date = msg.timestamp.toDate();
+                timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+              }
+              
+              messageElement.innerHTML = `
+                <div>${msg.text}</div>
+                <div class="message-info">${msg.username} • ${timeString}</div>
+              `;
+              
+              messagesContainer.appendChild(messageElement);
             });
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          }, (error) => {
+            console.error("Error al cargar mensajes: ", error);
+            messagesContainer.innerHTML = "<p>Error al cargar los mensajes. Intenta recargar la página.</p>";
           });
         }
         
@@ -1740,6 +1801,7 @@
           if (user) {
             currentUser = user;
             showChatInterface();
+            setButtonsLoading(false);
           } else {
             currentUser = null;
             showLoginInterface();
@@ -1841,13 +1903,17 @@
             if(emailModal) emailModal.addEventListener('click', function(e) { if (e.target === emailModal) { hideEmailModal(); } });
             
             // Botones que muestran el chat/login
-            if(papoChatBtn) papoChatBtn.addEventListener('click', () => { showLoginInterface(); });
-            if(mobileChat) mobileChat.addEventListener('click', () => { showLoginInterface(); });
+            if(papoChatBtn) papoChatBtn.addEventListener('click', () => { 
+                document.querySelector('.sidebar-right').scrollIntoView({ behavior: 'smooth' }); 
+            });
+            if(mobileChat) mobileChat.addEventListener('click', () => { 
+                document.querySelector('.sidebar-right').scrollIntoView({ behavior: 'smooth' }); 
+            });
             
             // Lógica de los botones del chat
             if(sendMessageBtn) sendMessageBtn.addEventListener('click', sendMessage);
             if(messageInput) messageInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { sendMessage(); } });
-            if(logoutBtn) logoutBtn.addEventListener('click', () => { auth.signOut(); });
+            if(logoutBtn) logoutBtn.addEventListener('click', () => { signOut(auth); });
             if(document.getElementById('password')) document.getElementById('password').addEventListener('keydown', (e) => { if (e.key === 'Enter') { window.login(); } });
 
             const menuToggle = document.getElementById('menuToggle');
